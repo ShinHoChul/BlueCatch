@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style >
+			.li_table{
+				width: 100%;
+				
+				border: 2 solid black;
+
+			}
+			.li_table ul{
+				clear: left;
+				margin: 0;
+				padding: 0;
+				list-style-type: none;
+				border-top: 1 solid red;
+			}
+			
+			.li_table .subject{
+				font-weight: bold;
+				text-align: center;
+			}
+			.li_table ul li{
+				text-align: center;
+				float: left;
+				margin: 0;
+				padding: 2px,1px;
+				border-right: 1 solid red;
+				width: 100px;
+			}
+			.li_table ul .col {
+				width: 99px;
+			}
+			
+			
+		</style>
+		
+	</head>
+	<body>
+		<div><h1>Main Page List</h1></div>
+		<div class="li_table" id="contentDiv">
+				
+			
+		</div>
+		
+		<div>
+		<button onclick="goNext()">글작성</button>
+		</div>
+		
+		<script type="text/javascript">
+			var goNext = function(){
+				location.href="/main/write";
+			}
+			var goPage = function(num){
+				location.href="/main/detail/"+num;
+			}
+			
+		</script>
+		
+		<script src="http://192.168.0.34:8008/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		var socket = io.connect('http://192.168.0.34:8008');
+		socket.emit('example message 2', { hello: 'main' });
+
+		socket.on('example message 1', function (data) {
+			
+		   var data = data.hello;
+		   console.log("data="+data);
+		   var lengthDa = data.length;
+
+		   var str= "";
+		   str+='<ul  class="subject">';
+		   str +='<li  class="col">번호</li>';
+		   str +='<li >제목</li>';
+		   str +='<li>내용</li>';
+		   str +='</ul>';		
+		   
+		   for(var i = 0 ; i < lengthDa; i++){
+		   	str += '<ul  class="subject">';
+			str	+= '<li  class="col" onclick="goPage('+data[i].num+')"><a href="javascript:void(0)">'+data[i].num+'</a></li>';
+			str  += '<li >'+data[i].title+'</li>';
+			str +=  '<li>'+data[i].content+'</li>';
+			str += '</ul>	';
+		   }
+		   
+		   document.getElementById("contentDiv").innerHTML = str;
+		  
+		});
+		
+		
+		</script>
+		
+		
+	</body>
+</html>
+
+
+
+

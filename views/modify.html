@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<div ><h1>Detail</h1></div>
+		<div>
+			<div >제목 : <input type="text" id="title" name="title" value="" onchange="titlechange(this.value)"></div>
+			<div >내용 : <input type="text" id="content" name="content" value="" onchange="contentchange(this.value)"> </div>
+		</div>
+		
+		<div id="buttonList"></div>
+					<script type="text/javascript">
+		
+			var back = function(){
+				location.href="/main/main";
+			}
+			
+		</script>
+		
+		<script src="http://192.168.0.34:8008/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		var socket = io.connect('http://192.168.0.34:8008');
+		var contentNum = "";
+		socket.on('example message 1', function (data) {
+			
+		   var dataa = data.hello;
+		   console.log(dataa);
+		   var str ="";
+		   str = '<button onclick="back()">목록</button>';
+		   contentNum = dataa[0].num;
+		   document.getElementById("title").value =dataa[0].title;
+		   document.getElementById("content").value = dataa[0].content;
+		   document.getElementById("buttonList").innerHTML = str;
+		  
+		});
+		socket.emit('example message 2', { hello: 'modify' });
+		
+		var titlechange = function(data){
+			console.log(data);
+			socket.emit('titleChange', { title: data,
+																	 num:contentNum
+			 });
+		}
+		
+		var contentchange = function(data){
+						socket.emit('contentChange', { content: data,
+																	 num:contentNum
+			 });
+		}
+		
+		
+		
+		
+		</script>
+
+
+	</body>
+</html>
